@@ -7,13 +7,33 @@ bot.set_webhook(const.URL)
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
-    if message.chat.type == 'private' and message.chat.username is not None and message.chat.username == 'faleksander1':
-        bot.reply_to(message, 'Здарова, Бандит!')
-        bot.send_sticker(message.chat.id, const.FRY_FUCK_YOU_STICKER, message.message_id)
-    elif message.chat.last_name == 'Fal' or message.chat.last_name == 'Кузьмин':
-        bot.reply_to(message, 'Падла')
-    else:
-        bot.send_sticker(message.chat.id, const.FRY_FUCK_YOU_STICKER, message.message_id)
+    try:
+        user = message.from_user
+        chat_id = message.chat.id
+        username_lower = str(user.username).lower()
+        last_name_lower = str(user.last_name).lower()
+        first_name_lower = str(user.first_name).lower()
+        if username_lower == 'faleksander':
+            bot.send_message(chat_id, 'Доброго времени суток, хозяин!')
+        elif 'кузьмин' in last_name_lower:
+            bot.send_message(chat_id, 'Падла ' + const.EMOJI_ANGRY)
+        elif username_lower == 'taraskinnik':
+            bot.send_message(chat_id, 'Ебать ты жирный ' + const.EMOJI_SCARED)
+        elif 'ksenia' in first_name_lower or 'vetrova' in last_name_lower:
+            bot.send_photo(chat_id, open('files/raccoon_welcome.jpg', 'rb'))
+        else:
+            bot.send_message(chat_id, 'Вечер в хату!')
+        bot.send_message(chat_id, 'Можешь заюзать команду /bet чтобы поставить на следующего успешого съебатора!')
+    except AttributeError as e:
+        print(e)
+        bot.send_message(message.chat.id, 'Произошла хуйня :(')
+
+
+@bot.message_handler(commands=['bet'])
+def handle_bet(message):
+    chat_id = message.chat.id
+    bot.send_photo(chat_id, open('files/faktura_whos_next.jpg', 'rb'))
+    bot.send_audio(chat_id, open('files/faktura_kombat_short.mp3', 'rb'))
 
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
