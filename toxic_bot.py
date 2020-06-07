@@ -23,7 +23,7 @@ def handle_start(message):
             bot.send_photo(chat_id, open('files/raccoon_welcome.jpg', 'rb'))
         else:
             bot.send_message(chat_id, 'Вечер в хату!')
-        bot.send_message(chat_id, 'Можешь заюзать команду /bet чтобы поставить на следующего успешого съебатора!')
+        bot.send_message(chat_id, 'Можешь использовать команду /bet чтобы поставить на следующего успешого съебатора!')
     except AttributeError as e:
         print(e)
         bot.send_message(message.chat.id, 'Произошла хуйня :(')
@@ -34,6 +34,7 @@ def handle_bet(message):
     chat_id = message.chat.id
     bot.send_photo(chat_id, open('files/faktura_whos_next.jpg', 'rb'))
     bot.send_audio(chat_id, open('files/faktura_kombat_short.mp3', 'rb'))
+    bot.send_message(chat_id, 'Больше я ничего не умею, абманул ' + const.EMOJI_MAN_SHRUGGING)
 
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
