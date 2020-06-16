@@ -41,7 +41,7 @@ def put_bet(chat_id, bet_username):
 
 def get_data(chat_id):
     user_table = dynamodb.Table('User')
-    return user_table.get_item(Key={ATTRIBUTE_CHAT_ID: str(chat_id), ATTRIBUTE_DATA_TYPE: DATA})['Item']
+    return user_table.get_item(Key={ATTRIBUTE_CHAT_ID: str(chat_id), ATTRIBUTE_DATA_TYPE: DATA}).get('Item', None)
 
 
 def set_used_bet(chat_id):
