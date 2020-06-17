@@ -34,7 +34,8 @@ def handle_start(message):
     else:
         bot.send_message(chat_id, 'Вечер в хату!')
     bot.send_message(chat_id, 'Можешь использовать команду /bet чтобы поставить на следующего успешого съебатора!')
-    dao.put_data(chat_id, user)
+    if not dao.get_data(chat_id):
+        dao.put_data(chat_id, user)
 
 
 @bot.message_handler(commands=['bet'])
@@ -46,7 +47,7 @@ def handle_bet(message):
         return
 
     if dao.has_bets(chat_id):
-        bot.send_message(chat_id, 'Ты уже поставил ' + const.EMOJI_VERY_ANGRY)
+        bot.send_message(chat_id, 'У тебя уже есть ставка ' + const.EMOJI_VERY_ANGRY)
         return
 
     split = str(message.text).split()

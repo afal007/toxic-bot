@@ -19,11 +19,12 @@ dynamodb = boto3.resource('dynamodb')
 
 def put_data(chat_id, user):
     user_table = dynamodb.Table('User')
+    username = user.username if user.username else user.first_name + ' ' + user.last_name
     user_table.put_item(
         Item={
             ATTRIBUTE_CHAT_ID: str(chat_id),
             ATTRIBUTE_DATA_TYPE: DATA,
-            ATTRIBUTE_USER_NAME: user.username
+            ATTRIBUTE_USER_NAME: username
         }
     )
 
