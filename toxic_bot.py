@@ -65,7 +65,7 @@ def handle_bet(message):
             return
 
         dao.put_bet(chat_id, bet_username)
-        bot.send_message(chat_id, 'Принято ' + const.EMOJI_SUNGLASSES)
+        bot.send_message(chat_id, 'Принято ' + const.EMOJI_SUNGLASSES + ' Смотри в /rates')
     else:
         if not bool(data.get(dao.ATTRIBUTE_USED_BET, None)):
             bot.send_photo(chat_id, open('files/faktura_whos_next.jpg', 'rb'))
@@ -76,6 +76,23 @@ def handle_bet(message):
         for item in list(const.BET_USERNAME_DICT.items()):
             markup.add(telebot.types.KeyboardButton('/bet ' + str(const.KEY_TO_POS[item[0]]) + ' ' + item[1]))
         bot.send_message(chat_id, 'Выбирай:', reply_markup=markup)
+
+
+@bot.message_handler(commands=['rates'])
+def handle_rates(message):
+    bets = dao.get_all_bets()
+    count = 0
+    rates = {}
+    for bet in bets:
+        user_name = bet[dao.ATTRIBUTE_BET_USER_NAME]
+        rates[user_name] = rates.get(user_name, 0) + 1
+        count += 1
+
+    res = ''
+    for key in rates.keys():
+        res += const.BET_USERNAME_DICT[key] + ' - ' + ("%.2f" % (rates[key] / count * 100)) + '%\n'
+
+    bot.send_message(message.chat.id, res)
 
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])

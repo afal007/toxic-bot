@@ -63,4 +63,11 @@ def has_bets(chat_id):
     response = user_table.scan(
         FilterExpression=Key(ATTRIBUTE_CHAT_ID).eq(str(chat_id)) & Key(ATTRIBUTE_DATA_TYPE).begins_with(BET)
     )
-    return len(response['Items']) > 0
+    return len(response.get('Items', [])) > 0
+
+
+def get_all_bets():
+    user_table = dynamodb.Table('User')
+    return user_table.scan(
+        FilterExpression=Key(ATTRIBUTE_DATA_TYPE).begins_with(BET)
+    ).get('Items', [])
